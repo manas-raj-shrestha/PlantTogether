@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # place this script in project/android/app/
+printf "\nPost Clone Started\n\n"
 cd ..
 # fail if any command fails
 set -e
