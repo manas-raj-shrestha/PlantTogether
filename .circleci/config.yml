@@ -13,4 +13,5 @@ jobs:
       - run: flutter -v build apk --debug
       
       - store_artifacts:
-          path: /artifacts
+          path: app/outputs/flutter-apk/app-debug.apk
+          destination: /apk/
