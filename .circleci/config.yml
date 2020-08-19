@@ -11,7 +11,7 @@ jobs:
       - run: flutter channel stable
       - run: flutter doctor
       - run: flutter -v build apk --debug
-      - *persist_release_workspace
+    
       - store_artifacts:
           path: app/outputs/flutter-apk/
           destination: /apk/
