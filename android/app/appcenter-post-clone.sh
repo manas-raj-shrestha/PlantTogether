@@ -19,4 +19,4 @@ flutter doctor
 flutter build apk --debug
 
 # copy the APK where AppCenter will find it
-mkdir -p android/app/build/outputs/apk/; mv build/app/outputs/apk/release/app-release.apk $_
+mkdir -p android/app/build/outputs/apk/; mv build/app/outputs/apk/debug/app-release.apk $_
