@@ -16,7 +16,7 @@ export PATH=`pwd`/flutter/bin:$PATH
 
 flutter channel stable
 flutter doctor
-flutter build apk --debug
+flutter build apk --release
 
 # copy the APK where AppCenter will find it
-mkdir -p android/app/build/outputs/apk/; mv build/app/outputs/apk/debug/app-debug.apk $_
+mkdir -p android/app/build/outputs/apk/; mv build/app/outputs/apk/release/app-release.apk $_
