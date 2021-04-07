@@ -11,6 +11,7 @@ void main() {
     print("error ${error}");
   }
 
+  print("We are here");
   setupLocator();
   runApp(new RootWidget());
 }

@@ -23,9 +23,6 @@ class AuthenticationService {
     try {
       var user = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      _firebaseAuth
-          .currentUser()
-          .then((value) => print("there ${value.email}"));
 
       return user != null;
     } catch (e) {
@@ -35,7 +32,7 @@ class AuthenticationService {
   }
 
   Future checkIfUserIsLoggedIn() async {
-    if (await _firebaseAuth.currentUser() != null) {
+    if (await _firebaseAuth.currentUser != null) {
       return true;
     } else {
       return false;
@@ -43,7 +40,7 @@ class AuthenticationService {
   }
 
   Future getUser() async {
-    var user = await _firebaseAuth.currentUser();
+    var user = await _firebaseAuth.currentUser;
     return user;
   }
 

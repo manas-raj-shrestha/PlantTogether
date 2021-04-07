@@ -115,10 +115,11 @@ class _SignUpState extends State<SignUp> {
   Future writeUserToFireStore() async {
     var user = await AuthenticationService().getUser();
 
-    await Firestore.instance
-        .collection("users")
-        .document(user.email)
-        .setData({'email': user.email});
+    //  Query snapshot =  FirebaseFirestore.instance
+    //       .collection("users");
+    //      snapshot.get().then((value) => value);
+    //       .document(user.email)
+    //       .setData({'email': user.email});
 
     changeLoadingStatus(false);
   }

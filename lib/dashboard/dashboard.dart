@@ -4,7 +4,6 @@ import 'package:first_flutter_app/repositories/PlantsRepo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../utils.dart';
@@ -22,8 +21,8 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int currentTabIndex = 0;
 
-  final Widget svgIcon =
-      SvgPicture.asset("assets/flower.svg", height: 36, width: 36);
+  final Widget svgIcon = Container();
+  // SvgPicture.asset("assets/flower.svg", height: 36, width: 36);
 
   void processData(snapshot) {
     List<Plants> plants = [];
@@ -209,12 +208,13 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Widget getIcon(iconAsset, color, double size) {
-    return SvgPicture.asset(
-      iconAsset,
-      height: size,
-      width: size,
-      color: (color != null) ? color : Colors.black,
-    );
+    return Container();
+    // return SvgPicture.asset(
+    //   iconAsset,
+    //   height: size,
+    //   width: size,
+    //   color: (color != null) ? color : Colors.black,
+    // );
   }
 
   Widget getBottomNavBar() {

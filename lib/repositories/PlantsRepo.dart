@@ -5,9 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// Uses firebase to manage repository for plants
 class PlantsRepository {
   Future<List<Plants>> getPlantList() async {
-    final databaseReference = Firestore.instance;
+    final databaseReference = FirebaseFirestore.instance;
 
-    var documents = await databaseReference.collection("plants").getDocuments();
+    var documentsReference = await databaseReference.collection("plants").get();
+    var documents = documentsReference.docs;
     return processData(documents);
   }
 

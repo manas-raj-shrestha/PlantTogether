@@ -22,11 +22,11 @@ class _ProductManagerState extends State<ProductManager> {
   List _products;
 
   Future<String> _getData() async {
-    var response = await http.get("https://jsonplaceholder.typicode.com/posts");
-    print(response.body);
-    setState(() {
-      _products = jsonDecode(response.body);
-    });
+    // var response = await http.get("https://jsonplaceholder.typicode.com/posts");
+    // print(response.body);
+    // setState(() {
+    //   _products = jsonDecode(response.body);
+    // });
   }
 
   @override
