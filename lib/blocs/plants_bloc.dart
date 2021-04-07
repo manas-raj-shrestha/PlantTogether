@@ -32,7 +32,6 @@ class PlantsAreLoaded extends PlantState {
   List<Object> get props => [_plantList];
 
   DummyData getPlants() {
-    print("get plants called");
     return this._plantList;
   }
 }
@@ -55,11 +54,9 @@ class PlantsBloc extends Bloc<PlantEvents, PlantState> {
   @override
   Stream<PlantState> mapEventToState(PlantEvents event) async* {
     if (event is FetchPlants) {
-      print("here in fetch plants");
       try {
         // List<Plants> plants = await plantsRepository.getPlantList();
         // print(plants.toList());
-        print("here in fetch plants in try");
         yield PlantsAreLoaded(DummyData("Plants Are Loaded"));
       } catch (e) {
         print("${e} error");

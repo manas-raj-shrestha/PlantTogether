@@ -52,7 +52,7 @@ class _LoginState extends State<Login> {
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Color(parseColor("#67b666")))),
-                                labelText: "Username",
+                                labelText: "Email",
                                 labelStyle: TextStyle(
                                     color: Color(parseColor("#67b666")))),
                           )),

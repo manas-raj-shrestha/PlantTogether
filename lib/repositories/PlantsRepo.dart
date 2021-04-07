@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_flutter_app/data/plants.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Uses firebase to manage repository for plants
 class PlantsRepository {
@@ -9,25 +10,26 @@ class PlantsRepository {
 
     var documentsReference = await databaseReference.collection("plants").get();
     var documents = documentsReference.docs;
+
     return processData(documents);
   }
 
-  List<Plants> processData(snapshot) {
+  List<Plants> processData(List<QueryDocumentSnapshot> snapshot) {
     List<Plants> plants = [];
 
-    snapshot.documents.forEach((f) {
+    snapshot.forEach((f) {
       return plants.add(Plants(
-          f.documentID,
-          f.data["name"],
-          f.data["description"],
-          f.data["scientific_name"],
-          f.data["image_url"],
-          f.data["plant_type"],
-          f.data["price"],
-          f.data["size"],
-          f.data["diameter"],
-          f.data["humidity"],
-          f.data["temperature"]));
+          f.id,
+          f["name"],
+          f["description"],
+          f["scientific_name"],
+          f["image_url"],
+          f["plant_type"],
+          f["price"],
+          f["size"],
+          f["diameter"],
+          f["humidity"],
+          f["temperature"]));
     });
 
     return plants;

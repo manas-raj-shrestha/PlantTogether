@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './utils.dart';
 import './authentication_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Landing extends StatelessWidget {
   checkUser(context) async {
@@ -13,6 +14,8 @@ class Landing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    print("s ${screenSize.height} ${screenSize.width}  screenSize.width");
     this.checkUser(context);
 
     return Scaffold(
@@ -28,14 +31,17 @@ class Landing extends StatelessWidget {
                 "Let's plant with us",
                 style: TextStyle(fontSize: 26),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text("make the world green again",
                   style: TextStyle(fontSize: 20)),
-              SizedBox(height: 36),
-              Image.asset('assets/gardener.jpg'),
-              SizedBox(height: 48),
+              SizedBox(height: 36.h),
+              Image.asset(
+                'assets/gardener.jpg',
+                height: 250.h,
+              ),
+              SizedBox(height: 48.h),
               getSignInButton(context),
-              SizedBox(height: 20),
+              SizedBox(height: 20.h),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed('/signup');
@@ -52,16 +58,14 @@ class Landing extends StatelessWidget {
 
   Widget getSignInButton(context) {
     return Container(
-        margin: EdgeInsets.fromLTRB(36, 0, 36, 0),
         child: SizedBox(
-            width: double.infinity,
             child: RaisedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/login');
                 },
                 color: Color(parseColor("#67b666")),
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+                    padding: EdgeInsets.fromLTRB(36.w, 16.h, 36.w, 16.h),
                     child: Text(
                       "Sign In",
                       style: TextStyle(

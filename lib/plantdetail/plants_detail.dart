@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/plants.dart';
 import '../utils.dart';
 import './plant_detail_bottom_component.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../colors.dart';
 
 class PlantDetail extends StatelessWidget {
@@ -23,63 +24,66 @@ class PlantDetail extends StatelessWidget {
           ),
         ),
         body: Stack(children: <Widget>[
-          Container(
-              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            Container(
-                child: Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
-              Expanded(flex: 2, child: Image.network(plant.imageUrl)),
-              Expanded(
-                  flex: 1,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        getMiniInfoView(
-                            'assets/diameter.svg', plant.diameter, 'Diameter'),
-                        SizedBox(height: 16),
-                        getMiniInfoView(
-                            'assets/ruler.svg', plant.size, "Height"),
-                        SizedBox(height: 16),
-                        getMiniInfoView(
-                            'assets/humidity.svg', plant.humidity, 'Humidity'),
-                        SizedBox(height: 16),
-                        getMiniInfoView('assets/temperature.svg',
-                            plant.temperature, 'Temperature'),
-                        SizedBox(height: 16)
-                      ]))
+          SingleChildScrollView(
+            child: Container(
+                child:
+                    Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+                Container(),
+                Expanded(
+                    flex: 2,
+                    child: Image.network(
+                      plant.imageUrl,
+                      fit: BoxFit.contain,
+                    )),
+                SizedBox(width: 16.w),
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          getMiniInfoView(
+                              'diameter.svg', plant.diameter, 'Diameter'),
+                          SizedBox(height: 16.h),
+                          getMiniInfoView('ruler.svg', plant.size, "Height"),
+                          SizedBox(height: 16.h),
+                          getMiniInfoView(
+                              'humidity.svg', plant.humidity, 'Humidity'),
+                          SizedBox(height: 16.h),
+                          getMiniInfoView('temperature.svg', plant.temperature,
+                              'Temperature'),
+                          SizedBox(height: 16.h)
+                        ]))
+              ]),
+              Container(margin: EdgeInsets.all(16.h), child: Details(plant))
             ])),
-            Container(
-                child: Expanded(
-                    child: Container(
-                        margin: EdgeInsets.all(16), child: Details(plant))))
-          ])),
+          ),
           getBuyButton(context)
         ]));
   }
 
   Widget getBuyButton(context) {
-    return Positioned(
-        bottom: 0,
-        left: 0,
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-                padding: EdgeInsets.only(bottom: 16, left: 48, right: 48),
-                child: RaisedButton(
-                    onPressed: () {
-                      // Navigator.of(context).pushNamed('');
-                    },
-                    color: Color(parseColor(themeGreen)),
-                    child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
-                        child: Text(
-                          "Buy Now",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        )),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8))))));
+    return Container(
+        alignment: Alignment.bottomCenter,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+            padding: EdgeInsets.only(bottom: 16, left: 48.w, right: 48.w),
+            child: RaisedButton(
+                onPressed: () {
+                  // Navigator.of(context).pushNamed('');
+                },
+                color: Color(parseColor(themeGreen)),
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(36.w, 16.h, 36.w, 16.h),
+                    child: Text(
+                      "Buy Now",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    )),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)))));
   }
 
   getMiniInfoView(imageAsset, value, title) {

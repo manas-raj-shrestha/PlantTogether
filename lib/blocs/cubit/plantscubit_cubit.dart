@@ -14,16 +14,17 @@ class PlantscubitCubit extends Cubit<PlantscubitState> {
   }
 
   Future<void> getPlants() async {
+    print("getting plants");
     try {
       List<Plants> plants = await plantsRepository.getPlantList();
-      // print(plants.toList());
       emit(PlantsAreLoaded(plants));
       print("emmitted");
 
       // emit(WeatherLoading());
       // final weather = await _weatherRepository.fetchWeather(cityName);
       // emit(WeatherLoaded(weather));
-    } catch (_) {
+    } catch (err) {
+      print(err);
       // emit(WeatherError("Couldn't fetch weather. Is the device online?"));
     }
   }

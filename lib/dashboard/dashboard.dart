@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_flutter_app/authentication_service.dart';
 import 'package:first_flutter_app/blocs/cubit/plantscubit_cubit.dart';
 import 'package:first_flutter_app/repositories/PlantsRepo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils.dart';
 import '../simple_tab.dart';
@@ -20,46 +21,55 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int currentTabIndex = 0;
-
+  var plants = [];
   final Widget svgIcon = Container();
+  bool isWeb = true;
   // SvgPicture.asset("assets/flower.svg", height: 36, width: 36);
 
-  void processData(snapshot) {
+  void processData(QuerySnapshot snapshot) {
     List<Plants> plants = [];
 
-    snapshot.documents.forEach((f) {
+    snapshot.docs.forEach((doc) {
       return plants.add(Plants(
-          f.documentID,
-          f.data["name"],
-          f.data["description"],
-          f.data["scientific_name"],
-          f.data["image_url"],
-          f.data["plant_type"],
-          f.data["price"],
-          f.data["size"],
-          f.data["diameter"],
-          f.data["humidity"],
-          f.data["temperature"]));
+          doc.id,
+          doc["name"],
+          doc["description"],
+          doc["scientific_name"],
+          doc["image_url"],
+          doc["plant_type"],
+          doc["price"],
+          doc["size"],
+          doc["diameter"],
+          doc["humidity"],
+          doc["temperature"]));
     });
 
-    setState(() {
-      // this.plants.addAll(plants);
-    });
+    // setState(() {
+    //   this.plants.addAll(plants);
+    // });
   }
 
   @override
   void initState() {
-    var a = DotEnv().env['ENVIRONMENT'];
-    print('being build * ${a}');
     super.initState();
 
     // print(DotEnv().env['VAR_NAME']);
 
-    // final databaseReference = Firestore.instance;
-    // databaseReference
-    //     .collection("plants")
-    //     .getDocuments()
-    //     .then((snapshot) => {this.processData(snapshot)});
+    FirebaseFirestore.instance
+        .collection('plants')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      this.processData(querySnapshot);
+    });
+
+    // final databaseReference = FirebaseFirestore.instance;
+    // var a = databaseReference.collection("plants");
+
+    // print(a == null);
+
+    // a.get().then((value) => print(value.docs.length));
+    // .get()
+    // .then((snapshot) => {this.processData(snapshot)});
   }
 
   Widget getTabSpecificContent(plants) {
@@ -118,14 +128,13 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                             height: 50,
-                            child: Flexible(
-                                child: Text(
+                            child: Text(
                               "The areca palm, otherwise known as butterfly palm, golden cane palm, bamboo palm, or its Latin name, Dypsis lutescens, is a native of Madagascar. Areca palms require bright, indirect light, but direct sunlight may burn the leaves. Home temperatures between 60°F (16°C) to 75°F (24°C) are fine, but sudden temperature drops or cold drafts can lead to brown spots on the leaves. Indoors, expect this plant to get 6 to 10 feet (2 to 3 meters) tall.",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.normal),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
-                            ))),
+                            )),
                       ],
                     )),
                   ],
@@ -173,6 +182,7 @@ class _DashboardState extends State<Dashboard> {
     // plantsCubit.getWeather();
     print("calling fetch");
     // plantsBloc.add(FetchPlants());
+
     return Scaffold(
         backgroundColor: Color(parseColor("#F8F8F8")),
         body: BlocProvider<PlantscubitCubit>(
@@ -180,41 +190,44 @@ class _DashboardState extends State<Dashboard> {
               return PlantscubitCubit(PlantsRepository());
             },
             child: Stack(children: <Widget>[
-              Container(
-                  margin: EdgeInsets.fromLTRB(16.0, 56, 16, 16),
-                  child: Column(
-                    children: <Widget>[
-                      getGreetingView(),
-                      SizedBox(height: 36),
-                      getTipWidget(),
-                      Container(
-                          margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
-                          child: SimpleTab(
-                              ["All", "Outdoor", "Indoor", "Seasonal"],
-                              currentTabIndex,
-                              onTabChanged)),
-                      BlocBuilder<PlantscubitCubit, PlantscubitState>(
-                          builder: (context, state) {
-                        if (state is PlantsAreLoaded) {
-                          print(state.getPlants());
-                          return getTabSpecificContent(state.getPlants());
-                        }
-                        return Text("plants.toString()");
-                      }),
-                    ],
-                  )),
+              SingleChildScrollView(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(16.w, 56.h, 16.w, 80.h),
+                    child: Column(
+                      children: <Widget>[
+                        getGreetingView(),
+                        SizedBox(height: 36.h),
+                        getTipWidget(),
+                        Container(
+                            margin: EdgeInsets.fromLTRB(0, 16.h, 0, 16.h),
+                            child: SimpleTab(
+                                ["All", "Outdoor", "Indoor", "Seasonal"],
+                                currentTabIndex,
+                                onTabChanged)),
+                        BlocBuilder<PlantscubitCubit, PlantscubitState>(
+                            builder: (context, state) {
+                          if (state is PlantsAreLoaded) {
+                            return getTabSpecificContent(state.getPlants());
+                          }
+                          return Text("What is this?");
+                        }),
+                      ],
+                    )),
+              ),
               getBottomNavBar()
             ])));
   }
 
   Widget getIcon(iconAsset, color, double size) {
-    return Container();
-    // return SvgPicture.asset(
-    //   iconAsset,
-    //   height: size,
-    //   width: size,
-    //   color: (color != null) ? color : Colors.black,
-    // );
+    if (!isWeb) {
+      iconAsset = "assets/$iconAsset";
+    }
+    return SvgPicture.asset(
+      iconAsset,
+      height: size,
+      width: size,
+      color: (color != null) ? color : Colors.black,
+    );
   }
 
   Widget getBottomNavBar() {
@@ -226,28 +239,26 @@ class _DashboardState extends State<Dashboard> {
                     topRight: Radius.circular(16),
                     topLeft: Radius.circular(16))),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+              padding: EdgeInsets.fromLTRB(0, 16.h, 0, 16.h),
               child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    getIcon(
-                        "assets/compass.svg", Color(parseColor("#67b666")), 24),
-                    getIcon("assets/cloud.svg", null, 24),
+                    getIcon("compass.svg", Color(parseColor("#67b666")), 24),
+                    getIcon("cloud.svg", null, 24),
                     Stack(
                       children: <Widget>[
-                        getIcon("assets/hexagon.svg",
-                            Color(parseColor("#67b666")), 36),
+                        getIcon(
+                            "hexagon.svg", Color(parseColor("#67b666")), 36),
                         Positioned.fill(
                             child: Padding(
                                 padding: EdgeInsets.all(10),
-                                child: getIcon(
-                                    "assets/leaf.svg", Colors.white, 20)))
+                                child: getIcon("leaf.svg", Colors.white, 20)))
                       ],
                     ),
-                    getIcon("assets/heart.svg", null, 24),
+                    getIcon("heart.svg", null, 24),
                     GestureDetector(
-                      child: getIcon("assets/user.svg", null, 24),
+                      child: getIcon("user.svg", null, 24),
                       onTap: () {
                         AuthenticationService().signOutUser();
                         Navigator.of(context).pushReplacementNamed('/login');

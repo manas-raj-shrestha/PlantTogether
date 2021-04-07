@@ -18,7 +18,6 @@ class PlantsAreLoaded extends PlantscubitState {
   List<Object> get props => [_plantList];
 
   List<Plants> getPlants() {
-    print("get plants called");
     return this._plantList;
   }
 }
